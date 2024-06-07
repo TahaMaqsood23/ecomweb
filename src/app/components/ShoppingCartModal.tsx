@@ -29,7 +29,9 @@ const ShoppingCartModal = () => {
             <div className="mt-8 flex-1 overflow-y-auto">
               <ul className="-my-6 divide-y divide-gray-200">
                 {cartCount === 0 ? (
-                  <h1 className="py-6">You don't have any items in cart :|</h1>
+                  <h1 className="py-6">
+                    You don&apos;t have any items in cart :|
+                  </h1>
                 ) : (
                   <>
                     {Object.values(cartDetails ?? {}).map((entry) => (
@@ -78,19 +80,23 @@ const ShoppingCartModal = () => {
                 <p>Subtotal:</p>
                 <p>${totalPrice}</p>
               </div>
-              <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes are calculated at Checkout</p>
+              <p className="mt-0.5 text-sm text-gray-500">
+                Shipping and taxes are calculated at Checkout
+              </p>
               <div className="mt-6">
                 <Button className="w-full">Checkout</Button>
-
               </div>
               <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                 <p>
-                  OR {''}
-                   <button onClick={()=>handleCartClick()} className="font-medium text-primary hover:text-primary/80">Continue Shopping</button>
+                  OR {""}
+                  <button
+                    onClick={() => handleCartClick()}
+                    className="font-medium text-primary hover:text-primary/80"
+                  >
+                    Continue Shopping
+                  </button>
                 </p>
-
               </div>
-
             </div>
           </div>
         </SheetContent>
