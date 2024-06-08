@@ -1,7 +1,9 @@
-import { client } from "../lib/sanity";
-import { simplifiedProduct } from "../interface";
-import Link from "next/link";
-import Image from "next/image";
+'use client'
+import { useEffect, useState } from 'react';
+import { client } from '../lib/sanity';
+import { simplifiedProduct } from '../interface';
+import Link from 'next/link';
+import Image from 'next/image';
 
 async function getAllProducts() {
   const query = `*[_type=='product'] | order(_createdAt desc){
@@ -16,16 +18,36 @@ async function getAllProducts() {
   return data;
 }
 
-const AllProducts = async () => {
-  const data: simplifiedProduct[] = await getAllProducts();
+const AllProducts = () => {
+  const [products, setProducts] = useState<simplifiedProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const data = await getAllProducts();
+        console.log('Fetched products:', data); // Debugging log
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">
-          All Products
-        </h2>
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900">All Products</h2>
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {data.map((product) => (
+          {products.map((product) => (
             <div key={product._id} className="group relative">
               <div className="aspect-square w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-80">
                 <Image
@@ -43,9 +65,7 @@ const AllProducts = async () => {
                       {product.name}
                     </Link>
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    {product.categoryName}
-                  </p>
+                  <p className="mt-1 text-sm text-gray-500">{product.categoryName}</p>
                 </div>
                 <p className="text-sm font-medium">${product.price}</p>
               </div>
